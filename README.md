@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="logo.svg" alt="Clarity Principle" width="360">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="logo-light.svg">
+    <source media="(prefers-color-scheme: light)" srcset="logo.svg">
+    <img src="logo.svg" alt="Clarity Principle" width="360">
+  </picture>
 </p>
 
 <p align="center">Make business logic visible through traceability and narration.</p>
