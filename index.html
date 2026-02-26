@@ -1332,6 +1332,124 @@
                 font-size: 0.62rem;
             }
         }
+
+        /* Implementation patterns cards */
+        .impl-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-top: 2.5rem;
+        }
+
+        .impl-card {
+            padding: 1.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .impl-card:last-child {
+            border-bottom: none;
+        }
+
+        .impl-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .impl-card-number {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-accent);
+        }
+
+        .impl-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0;
+        }
+
+        .impl-card p {
+            font-size: 0.92rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .impl-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .impl-tag {
+            display: inline-block;
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            background: var(--color-accent-light);
+            color: var(--color-accent);
+            border-radius: 3px;
+            margin-right: 0.35rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Trace testing callout */
+        .trace-testing-callout {
+            margin-top: 2rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--color-bg);
+            border-left: 3px solid var(--color-accent);
+            border-radius: 0 4px 4px 0;
+            font-size: 0.92rem;
+            color: var(--color-text-secondary);
+        }
+
+        .trace-testing-callout strong {
+            color: var(--color-text);
+        }
+
+        /* FAQ items */
+        .faq-items {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-top: 2.5rem;
+        }
+
+        .faq-item {
+            padding: 1.75rem 0;
+            border-bottom: 1px solid var(--color-border-dark);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-objection {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--color-text-on-dark);
+            margin-bottom: 0.75rem;
+            font-style: italic;
+        }
+
+        .faq-response {
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .faq-response p {
+            color: var(--color-text-on-dark-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-response p:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-response strong {
+            color: var(--color-text-on-dark);
+        }
     </style>
 </head>
 <body>
@@ -1348,6 +1466,8 @@
                 <a href="#values" class="nav-link">Values</a>
                 <a href="#get-started" class="nav-link">Get Started</a>
                 <a href="#audit" class="nav-link">Audit</a>
+                <a href="#implementation" class="nav-link">Implementation</a>
+                <a href="#faq" class="nav-link">FAQ</a>
                 <a href="https://github.com/FarabiInnovations/clarity-principle" class="nav-link">GitHub</a>
             </div>
         </div>
@@ -1963,6 +2083,96 @@
                     <div class="level-content">
                         <h3>Expand</h3>
                         <p>Next rule, then the next. The system progressively builds a complete picture of its own business logic, visible to anyone who needs it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation Patterns (light) -->
+    <section id="implementation">
+        <div class="container-wide">
+            <h2>Implementation patterns</h2>
+            <p>How to add Layer 1 traceability without polluting business logic or adding latency to the hot path.</p>
+
+            <div class="impl-cards">
+                <div class="impl-card">
+                    <div class="impl-card-header">
+                        <span class="impl-card-number">Pattern 1</span>
+                    </div>
+                    <h3>Keep business logic pure</h3>
+                    <p>Don't hardcode trace JSON inside your business rules. The rule function should do one thing: evaluate the business decision. Use decorators, middleware, or aspect-oriented patterns to emit traces around the rule, not inside it.</p>
+                    <p>The business rule stays readable. The trace is a concern of the infrastructure layer. When someone reads the pricing function, they see pricing logic — not logging boilerplate.</p>
+                </div>
+
+                <div class="impl-card">
+                    <div class="impl-card-header">
+                        <span class="impl-card-number">Pattern 2</span>
+                    </div>
+                    <h3>Use your existing observability pipeline</h3>
+                    <p>Map business decisions to OpenTelemetry custom spans with semantic attributes: <code class="impl-tag">business.rule.name</code> <code class="impl-tag">business.rule.fired</code> <code class="impl-tag">business.rule.outcome</code>. Your team already has Datadog, Grafana, or Jaeger. OTel lets you feed business traceability into infrastructure you already operate.</p>
+                    <p>No bespoke JSON logging system required. No new dashboards to build. Business decisions show up alongside the technical spans you already monitor.</p>
+                </div>
+
+                <div class="impl-card">
+                    <div class="impl-card-header">
+                        <span class="impl-card-number">Pattern 3</span>
+                    </div>
+                    <h3>Emit asynchronously</h3>
+                    <p>Synchronous trace logging adds latency to the hot path. Fire a lightweight event to a background worker or message broker. The worker constructs the full trace payload. The main thread moves on.</p>
+                    <p>For high-throughput systems, use Kafka, RabbitMQ, or SQS. For lower-throughput services, an async in-process queue is fine. The point is the same: the business operation completes at full speed, the trace follows behind.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trace-Driven Testing (subtle bg) -->
+    <section style="background: var(--color-bg-subtle);" id="trace-testing">
+        <div class="container-wide">
+            <h2>Trace-driven testing</h2>
+            <p>The biggest risk with business traceability is drift. A developer updates a rule but forgets to update the trace. Now the narration layer confidently explains something that didn't happen.</p>
+
+            <p>If the trace says "volume discount fired" but the code no longer applies that discount, every downstream consumer — narration, audit, support tools — is wrong. Not subtly wrong. Confidently wrong.</p>
+
+            <p>The fix: make traces a testing contract. Tests shouldn't just assert the output. They must assert the trace payload too.</p>
+
+            <div class="trace-testing-callout">
+                <strong>The pattern:</strong> given these inputs, expect this output <em>and</em> this trace. If the return value is correct but the trace is missing or wrong, the test fails. Your traces are as important as your return values. Test them the same way.
+            </div>
+
+            <p style="margin-top: 1.5rem;">This catches drift in CI before it reaches production. When a developer changes a rule, the trace test breaks immediately — forcing the trace to stay in sync with the logic it describes.</p>
+        </div>
+    </section>
+
+    <!-- Engineering FAQ (dark) -->
+    <section class="section-dark" id="faq">
+        <div class="container-wide">
+            <h2>Common objections</h2>
+            <p>The three things engineers say before they've tried it.</p>
+
+            <div class="faq-items">
+                <div class="faq-item">
+                    <div class="faq-objection">"We already have Datadog / Splunk / ELK. We just log this."</div>
+                    <div class="faq-response">
+                        <p>Technical logs are backward-looking — searched during incidents, readable only by engineers. Business traceability is present-tense — recorded at decision time, readable by product, support, and sales.</p>
+                        <p><strong>Different question, different audience, different architecture.</strong> Observability tools monitor system health. Traceability records business reasoning. One tells you the server responded in 200ms. The other tells you why the customer got a 12% discount instead of 15%.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-objection">"If we want this, we should just buy a rules engine."</div>
+                    <div class="faq-response">
+                        <p>Rules engines are multi-quarter migrations that restructure how you write business logic. They're a platform decision with vendor lock-in, training costs, and integration overhead.</p>
+                        <p><strong>The Clarity Principle works with your existing code.</strong> You're recording decisions your code already makes. Start with one rule in one afternoon. A rules engine replaces your architecture. This is a design pattern that augments it.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-objection">"Sending business data to an LLM is a security risk."</div>
+                    <div class="faq-response">
+                        <p>Layer 1 — traceability — never touches an LLM. It's your data, your infrastructure, your control. The value of knowing which rules fired doesn't require AI at all.</p>
+                        <p>Layer 2 — narration — should use internal IDs and anonymized data, not raw PII. Enterprise LLM options include self-hosted models, zero-retention API contracts, or keeping narration strictly internal.</p>
+                        <p><strong>The Clarity Principle doesn't require sending sensitive data anywhere.</strong> Design the boundary. Most of the value lives in Layer 1, which never leaves your systems.</p>
                     </div>
                 </div>
             </div>
