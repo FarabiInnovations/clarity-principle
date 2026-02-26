@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarity Principle — Make business logic visible through traceability and narration</title>
+    <meta name="description" content="The Clarity Principle: make business logic visible through two layers — business traceability to record which rules fired and why, and LLM narration to make it legible to everyone.">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 60% — dominant white canvas */
+            --color-bg: #ffffff;
+            --color-bg-subtle: #f7f8fa;
+            /* 30% — dark sections for rhythm and weight */
+            --color-dark: #0f1a2e;
+            --color-dark-secondary: #1a2740;
+            /* 10% — accent blue for CTAs and highlights */
+            --color-accent: #2c6fef;
+            --color-accent-hover: #1b5ad4;
+            --color-accent-light: #e8f0fe;
+            /* Text */
+            --color-text: #1a1a1a;
+            --color-text-secondary: #4a4a4a;
+            --color-text-on-dark: #f0f2f5;
+            --color-text-on-dark-secondary: #a8b2c1;
+            /* Utility */
+            --color-border: #e2e2e2;
+            --color-border-dark: #253350;
+            --max-width: 860px;
+            --max-width-wide: 1120px;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout */
+        section {
+            padding: 5rem 1.5rem;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .container-wide {
+            max-width: var(--max-width-wide);
+            margin: 0 auto;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: var(--color-text);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        p {
+            color: var(--color-text-secondary);
+            margin-bottom: 1.25rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Highlight for key phrase */
+        .highlight {
+            color: var(--color-accent);
+            font-weight: 700;
+        }
+
+        .section-dark .highlight,
+        .hero .highlight {
+            color: #6ba3ff;
+        }
+
+        /* Audience line */
+        .audience {
+            font-size: 0.85rem;
+            color: var(--color-text-on-dark-secondary);
+            margin-bottom: 2.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .audience strong {
+            color: var(--color-text-on-dark);
+        }
+
+        /* Pull quote */
+        .pull-quote {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.35;
+            letter-spacing: -0.02em;
+            color: var(--color-text);
+            margin: 2rem 0 0;
+            padding: 1.5rem 0 0;
+            border-top: 3px solid var(--color-accent);
+        }
+
+        /* Flow diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 2.5rem 0 2rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-diagram-step {
+            text-align: center;
+            padding: 1rem 1.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            background: var(--color-bg-subtle);
+            flex: 0 1 auto;
+            min-width: 160px;
+        }
+
+        .flow-diagram-step-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .flow-diagram-step-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .flow-diagram-step.step-accent {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        .flow-diagram-step.step-accent .flow-diagram-step-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .flow-diagram-step.step-accent .flow-diagram-step-title {
+            color: #fff;
+        }
+
+        .flow-diagram-arrow {
+            font-size: 1.2rem;
+            color: var(--color-text-secondary);
+            padding: 0 0.6rem;
+            flex-shrink: 0;
+        }
+
+        /* Not the same section — dark variant */
+        .not-the-same {
+            background: var(--color-dark);
+        }
+
+        .not-the-same h2 {
+            color: #fff;
+        }
+
+        .not-the-same > .container-wide > p {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .section-dark .comparison-grid,
+        .not-the-same .comparison-grid {
+            border-color: var(--color-border-dark);
+        }
+
+        .section-dark .comparison-col:not(:last-child),
+        .not-the-same .comparison-col:not(:last-child) {
+            border-right-color: var(--color-border-dark);
+        }
+
+        .section-dark .comparison-header,
+        .not-the-same .comparison-header {
+            background: var(--color-dark-secondary);
+            color: var(--color-text-on-dark-secondary);
+            border-bottom-color: var(--color-border-dark);
+        }
+
+        .section-dark .comparison-row,
+        .not-the-same .comparison-row {
+            color: var(--color-text-on-dark-secondary);
+            border-bottom-color: var(--color-border-dark);
+        }
+
+        .section-dark .comparison-row-label,
+        .not-the-same .comparison-row-label {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .not-the-same .comparison-accent .comparison-row-label {
+            color: var(--color-accent);
+        }
+
+        .not-the-same .comparison-accent .comparison-row {
+            color: var(--color-text-on-dark);
+        }
+
+        .not-the-same .one-liner {
+            margin-top: 2rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--color-dark-secondary);
+            border-left: 3px solid var(--color-accent);
+            border-radius: 0 4px 4px 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--color-text-on-dark);
+        }
+
+        .not-the-same .complement-note {
+            background: var(--color-dark-secondary);
+            border-color: var(--color-border-dark);
+        }
+
+        .not-the-same .complement-note h3 {
+            color: #fff;
+        }
+
+        .not-the-same .complement-note p {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .not-the-same .complement-note em {
+            color: var(--color-text-on-dark);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            margin-top: 2.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .comparison-col {
+            padding: 0;
+        }
+
+        .comparison-col:not(:last-child) {
+            border-right: 1px solid var(--color-border);
+        }
+
+        .comparison-header {
+            padding: 1rem 1.25rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: 1px solid var(--color-border);
+            background: var(--color-bg-subtle);
+            color: var(--color-text-secondary);
+        }
+
+        .comparison-col.comparison-accent .comparison-header {
+            background: var(--color-accent);
+            color: #fff;
+            border-bottom-color: var(--color-accent-hover);
+        }
+
+        .comparison-row {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.85rem;
+            line-height: 1.55;
+            color: var(--color-text-secondary);
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .comparison-accent .comparison-row-label {
+            color: var(--color-accent);
+        }
+
+        .comparison-accent .comparison-row {
+            color: var(--color-text);
+        }
+
+        /* Complement note */
+        .complement-note {
+            margin-top: 2.5rem;
+            padding: 1.5rem 1.75rem;
+            background: var(--color-bg-subtle);
+            border-radius: 6px;
+            border: 1px solid var(--color-border);
+        }
+
+        .complement-note h3 {
+            font-size: 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .complement-note p {
+            font-size: 0.9rem;
+        }
+
+        .complement-note em {
+            font-style: italic;
+            color: var(--color-text);
+        }
+
+        /* Honest note */
+        .honest-note {
+            margin-top: 2rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--color-bg-subtle);
+            border-left: 3px solid var(--color-text-secondary);
+            border-radius: 0 4px 4px 0;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .honest-note strong {
+            color: var(--color-text);
+        }
+
+        /* Levels / Journey */
+        .levels {
+            background: var(--color-bg-subtle);
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-top: 2.5rem;
+        }
+
+        .level-item {
+            display: grid;
+            grid-template-columns: 4rem 1fr;
+            gap: 1.5rem;
+            padding: 1.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+            align-items: start;
+        }
+
+        .level-item:last-child {
+            border-bottom: none;
+        }
+
+        .level-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .level-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+
+        .level-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-text-secondary);
+        }
+
+        .level-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .level-content p {
+            font-size: 0.92rem;
+        }
+
+        .level-content .level-shift {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+
+        /* Dark section level overrides (Get Started) */
+        .section-dark .level-number {
+            color: #6ba3ff;
+        }
+
+        .section-dark .level-label {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .section-dark .level-content h3 {
+            color: #fff;
+        }
+
+        .section-dark .level-content p {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .section-dark .level-item {
+            border-bottom-color: var(--color-border-dark);
+        }
+
+        .section-dark .levels-grid {
+            margin-top: 2.5rem;
+        }
+
+        /* Value numbering */
+        .value-number {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 1.5rem;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            text-align: center;
+            border-radius: 50%;
+            background: var(--color-accent-light);
+            color: var(--color-accent);
+            margin-bottom: 0.6rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--color-accent);
+            color: #fff;
+        }
+
+        /* Button variants for dark backgrounds */
+        .btn-on-dark {
+            background: var(--color-accent);
+            color: #fff;
+        }
+
+        .btn-on-dark:hover {
+            background: var(--color-accent-hover);
+        }
+
+        .btn-outline-on-dark {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            background: transparent;
+        }
+
+        .btn-outline-on-dark:hover {
+            border-color: var(--color-accent);
+            background: var(--color-accent);
+            color: #fff;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 26, 46, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--color-border-dark);
+            z-index: 100;
+            padding: 1rem 1.5rem;
+        }
+
+        nav .container-wide {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--color-text-on-dark-secondary);
+            text-decoration: none;
+            margin-left: 1.75rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--color-accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Dark section utility */
+        .section-dark {
+            background: var(--color-dark);
+            color: var(--color-text-on-dark);
+        }
+
+        .section-dark h1,
+        .section-dark h2,
+        .section-dark h3 {
+            color: #fff;
+        }
+
+        .section-dark p {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        /* Hero — dark */
+        .hero {
+            background: var(--color-dark);
+            padding-top: 10rem;
+            padding-bottom: 6rem;
+        }
+
+        .hero h1 {
+            color: #fff;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            line-height: 1.75;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        /* Problem — white */
+        .problem {
+            background: var(--color-bg);
+        }
+
+        /* Example */
+        .example-demo {
+            margin-top: 2.5rem;
+            border: 1px solid var(--color-border-dark);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .example-demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            background: var(--color-dark-secondary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        /* Three-state demo view tabs */
+        .demo-view-tabs {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .demo-view-tab {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border: 1px solid var(--color-border-dark);
+            border-radius: 3px;
+            background: transparent;
+            color: var(--color-text-on-dark-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .demo-view-tab:hover {
+            color: var(--color-text-on-dark);
+        }
+
+        .demo-view-tab.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .example-demo-output {
+            padding: 1.25rem;
+            background: var(--color-dark-secondary);
+        }
+
+        /* Trace layer — JSON view (hidden by default) */
+        .trace-layer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: var(--color-dark-secondary);
+        }
+
+        .view-trace .trace-layer {
+            max-height: 1200px;
+        }
+
+        .trace-layer-inner {
+            padding: 1.25rem;
+            border-top: 1px solid var(--color-border-dark);
+        }
+
+        .trace-json {
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+            font-size: 0.75rem;
+            line-height: 1.65;
+            color: var(--color-text-on-dark-secondary);
+            background: rgba(0, 0, 0, 0.25);
+            padding: 1rem 1.25rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .trace-json .json-key {
+            color: #7dd3fc;
+        }
+
+        .trace-json .json-string {
+            color: #86efac;
+        }
+
+        .trace-json .json-number {
+            color: #fbbf24;
+        }
+
+        .trace-json .json-bool-true {
+            color: #4ade80;
+        }
+
+        .trace-json .json-bool-false {
+            color: #f87171;
+        }
+
+        .trace-json .json-null {
+            color: #9ca3af;
+        }
+
+        /* Narration block — rule cards + summary (hidden by default) */
+        .narration-block {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: var(--color-dark-secondary);
+        }
+
+        .view-trace-explain .narration-block {
+            max-height: 1600px;
+        }
+
+        .narration-block-inner {
+            padding: 1.25rem;
+            border-top: 1px solid var(--color-border-dark);
+        }
+
+        .narration-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        /* Rule narration cards */
+        .narration-rules {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .narration-rule {
+            padding: 0.9rem 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            border-left: 3px solid var(--color-border-dark);
+        }
+
+        .narration-rule.rule-fired {
+            border-left-color: #4ade80;
+        }
+
+        .narration-rule.rule-not-fired {
+            border-left-color: #9ca3af;
+        }
+
+        .narration-rule-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .narration-rule-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-text-on-dark);
+        }
+
+        .narration-rule-explanation {
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        /* Summary paragraph */
+        .narration-summary {
+            padding: 1rem 1.25rem;
+            background: rgba(44, 111, 239, 0.08);
+            border-left: 3px solid var(--color-accent);
+            border-radius: 0 4px 4px 0;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--color-text-on-dark);
+        }
+
+        .narration-summary-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-accent);
+            margin-bottom: 0.4rem;
+        }
+
+        .example {
+            background: var(--color-dark);
+        }
+
+        .example h2 {
+            color: #fff;
+        }
+
+        .example > .container-wide > p {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .example .surfaces p {
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        .example-demo-output .mono {
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+            font-size: 0.8rem;
+            color: var(--color-text-on-dark);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            line-height: 1.7;
+        }
+
+        /* Flow breakdown styles */
+        .flow-section {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--color-border-dark);
+        }
+
+        .flow-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .flow-section:first-child {
+            padding-top: 0;
+        }
+
+        .flow-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-accent);
+            margin-bottom: 0.6rem;
+        }
+
+        .flow-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .flow-part {
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+            font-size: 0.82rem;
+            color: var(--color-text-on-dark);
+            font-weight: 600;
+        }
+
+        .flow-badge {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .flow-badge-pass {
+            background: rgba(34, 150, 79, 0.15);
+            color: #4ade80;
+        }
+
+        .flow-badge-fail {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .flow-badge-info {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+
+        .flow-badge-warn {
+            background: rgba(255, 180, 50, 0.15);
+            color: #fbbf24;
+        }
+
+        .flow-badge-skip {
+            background: rgba(160, 160, 160, 0.15);
+            color: #9ca3af;
+        }
+
+        .flow-meta {
+            font-size: 0.8rem;
+            color: var(--color-text-on-dark-secondary);
+            margin-bottom: 0.2rem;
+        }
+
+        .flow-meta strong {
+            color: var(--color-text-on-dark);
+        }
+
+        .flow-checks {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .flow-check {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--color-text-on-dark-secondary);
+            padding: 0.2rem 0;
+        }
+
+        .flow-warehouses {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-warehouse {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            background: rgba(255, 180, 50, 0.15);
+            color: #fbbf24;
+            letter-spacing: 0.03em;
+        }
+
+        /* Example tabs */
+        .example-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .example-tab {
+            padding: 0.6rem 1.25rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border: 1px solid var(--color-border-dark);
+            border-radius: 4px;
+            background: var(--color-dark-secondary);
+            color: var(--color-text-on-dark-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .example-tab:hover {
+            color: var(--color-text-on-dark);
+        }
+
+        .example-tab.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .example-panel {
+            display: none;
+        }
+
+        .example-panel.active {
+            display: block;
+        }
+
+        /* Waterfall steps */
+        .flow-waterfall {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+        }
+
+        .flow-waterfall-step {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--color-text-on-dark-secondary);
+            padding: 0.3rem 0.6rem;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 3px;
+        }
+
+        .flow-waterfall-step span:first-child {
+            font-weight: 600;
+            color: var(--color-text-on-dark);
+        }
+
+        .surfaces {
+            margin-top: 2.5rem;
+        }
+
+        .surfaces p {
+            font-size: 1rem;
+        }
+
+        /* Values */
+        .values-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .value-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .value-item p {
+            font-size: 0.92rem;
+        }
+
+        /* What Changes for PMs — white */
+        .for-pms {
+            background: var(--color-bg);
+        }
+
+        .for-pms p:first-of-type {
+            font-size: 1.15rem;
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        /* Coming Soon — white */
+        .coming-soon {
+            background: var(--color-bg);
+        }
+
+        .agent-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .agent-card {
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            background: var(--color-bg-subtle);
+        }
+
+        .agent-card h3 {
+            margin-bottom: 0.6rem;
+        }
+
+        .agent-card p {
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+            background: var(--color-accent-light);
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        /* GitHub section — dark */
+        .github-section {
+            text-align: center;
+            padding: 5rem 1.5rem;
+            background: var(--color-dark);
+        }
+
+        .github-section h2 {
+            color: #fff;
+        }
+
+        .github-section p {
+            font-size: 1.05rem;
+            margin-bottom: 1.75rem;
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        /* About — white */
+        .about {
+            background: var(--color-bg);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .about-content p {
+            font-size: 1rem;
+        }
+
+        .about-links {
+            margin-top: 1rem;
+        }
+
+        .about-links a {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--color-accent);
+            text-decoration: none;
+            margin-right: 1.5rem;
+        }
+
+        .about-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer — dark */
+        footer {
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            background: var(--color-dark);
+            border-top: 1px solid var(--color-border-dark);
+        }
+
+        footer p {
+            font-size: 0.8rem;
+            color: var(--color-text-on-dark-secondary);
+        }
+
+        /* Three-layer cards */
+        .layer-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-top: 2.5rem;
+        }
+
+        .layer-card {
+            padding: 1.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .layer-card:last-child {
+            border-bottom: none;
+        }
+
+        .layer-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .layer-card-number {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-accent);
+        }
+
+        .layer-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0;
+        }
+
+        .layer-card p {
+            font-size: 0.92rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            html {
+                font-size: 16px;
+            }
+
+            section {
+                padding: 3.5rem 1.25rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .hero {
+                padding-top: 7rem;
+                padding-bottom: 4rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .agent-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .example-tabs {
+                flex-direction: column;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-col:not(:last-child) {
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .not-the-same .comparison-col:not(:last-child) {
+                border-bottom-color: var(--color-border-dark);
+            }
+
+            .level-item {
+                grid-template-columns: 3rem 1fr;
+                gap: 1rem;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .flow-diagram-arrow {
+                transform: rotate(90deg);
+                padding: 0.3rem 0;
+            }
+
+            .flow-diagram-step {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .pull-quote {
+                font-size: 1.2rem;
+            }
+
+            .demo-view-tabs {
+                gap: 0.25rem;
+            }
+
+            .demo-view-tab {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.62rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container-wide">
+            <a href="#" class="nav-brand">Clarity Principle</a>
+            <div class="nav-links">
+                <a href="#problem" class="nav-link">Problem</a>
+                <a href="#two-layers" class="nav-link">Two Layers</a>
+                <a href="#example" class="nav-link">Example</a>
+                <a href="#values" class="nav-link">Values</a>
+                <a href="#for-pms" class="nav-link">For PMs</a>
+                <a href="#get-started" class="nav-link">Get Started</a>
+                <a href="https://github.com/FarabiInnovations/clarity-principle" class="nav-link">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero (dark) -->
+    <section class="hero">
+        <div class="container">
+            <h1>Business logic should<br>be visible to everyone<br>who depends on it.</h1>
+            <p><strong style="color: var(--color-text-on-dark);">The Clarity Principle</strong> — make business logic visible through two layers. <span class="highlight">Business traceability</span> records which rules fired, under what conditions, and what the outcome was. <span class="highlight">Narration</span> uses an LLM to transform that traceability data into human-readable explanations. Traceability is valuable on its own. Narration amplifies it.</p>
+            <p class="audience">For <strong>product managers</strong>, <strong>engineers</strong>, <strong>CTOs</strong>, and anyone who needs to understand what a system is deciding and why.</p>
+            <a href="https://github.com/FarabiInnovations/clarity-principle" class="btn btn-on-dark">View on GitHub</a>
+        </div>
+    </section>
+
+    <!-- The Problem (light) -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <h2>The problem</h2>
+            <p>A support call comes in. The customer's quote looks wrong. A Slack thread starts. An engineer traces through the code. Forty-five minutes later, the answer is a 30-second explanation: a discount rule didn't fire because the quantity was one unit below the threshold. The system knew this the entire time. It just didn't record which business rules fired or why.</p>
+            <p>This is not a tooling problem. It's a design problem. Your system makes hundreds of business decisions every day — pricing rules, eligibility checks, approval workflows — but it only records the outcome. Which rules fired? Which didn't? Under what conditions? That information exists for a moment inside the running code, then it's gone. Product managers become the translation layer because the system was never designed to show its own reasoning.</p>
+            <p>The cost compounds: edge cases discovered weeks late. Support escalations that could have been self-service. Requirement refinements that start from scratch every time because there is no shared artifact showing which business rules actually applied and why.</p>
+        </div>
+    </section>
+
+    <!-- Not the Same (dark) -->
+    <section class="not-the-same" id="not-the-same">
+        <div class="container-wide">
+            <h2>Not an audit trail. Not logging.</h2>
+            <p>The most common objection: "We already log everything." The difference isn't about logging more. It's structural.</p>
+
+            <div class="comparison-grid">
+                <div class="comparison-col">
+                    <div class="comparison-header">Audit trails</div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Answers</div>
+                        "Can we prove what happened?"
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Audience</div>
+                        Compliance officers, auditors, legal
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Orientation</div>
+                        Backward-looking. Queried months later.
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Architecture</div>
+                        Separate write, separate system. Bolted on after the decision.
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Ceiling</div>
+                        Compliance. Valuable, necessary — but that's where it stops.
+                    </div>
+                </div>
+
+                <div class="comparison-col">
+                    <div class="comparison-header">Logging</div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Answers</div>
+                        "Why did it break?"
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Audience</div>
+                        Engineers, ops teams
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Orientation</div>
+                        Backward-looking. Searched during incidents.
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Architecture</div>
+                        Sprinkled around the logic. Requires Splunk, Datadog, or grep to read.
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Ceiling</div>
+                        Debugging and monitoring. Never escapes the engineering team.
+                    </div>
+                </div>
+
+                <div class="comparison-col comparison-accent">
+                    <div class="comparison-header">Business traceability</div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Answers</div>
+                        "Which business rule fired, under what conditions, and why?"
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Audience</div>
+                        The person doing the work — sales, procurement, product, customer success
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Orientation</div>
+                        Present-tense. Recorded at the moment each business rule fires.
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Architecture</div>
+                        Inline with the business logic. The trace is co-produced with the decision.
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-row-label">Ceiling</div>
+                        No ceiling. Traceability alone is powerful. Add LLM narration and it becomes legible to everyone.
+                    </div>
+                </div>
+            </div>
+
+            <div class="one-liner">Audit trails prove what happened. Logs diagnose what went wrong. Business traceability records which rules fired and why — and LLM narration makes that record legible to anyone.</div>
+
+            <div class="complement-note">
+                <h3>This isn't a new concept</h3>
+                <p>Business traceability itself is not new. Rules engines like Drools have provided rule-level traceability for years — you can see which rules fired and in what order. Decision tables, custom rule frameworks, even well-structured logging can capture decision points.</p>
+                <p>What's new is <em>narration</em>. Before LLMs, traceability data was only useful to engineers who understood the system's internals. Making that data legible to product managers, support teams, and business stakeholders required building custom UIs or writing documentation that went stale immediately. LLMs changed the economics: they can read structured traceability data and produce a human-readable explanation — cheaply, on demand, at the moment someone asks. That's what makes the full value of business traceability practical for enterprise SaaS applications.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Two Layers (light) -->
+    <section id="two-layers">
+        <div class="container">
+            <h2>The two layers</h2>
+            <p>The Clarity Principle is built on two foundational layers. The first is valuable on its own. The second amplifies it.</p>
+
+            <div class="layer-cards">
+                <div class="layer-card">
+                    <div class="layer-card-header">
+                        <span class="layer-card-number">Layer 1</span>
+                    </div>
+                    <h3>Business traceability</h3>
+                    <p>Record which business rules fired, under what conditions, and what the outcome was. This is separate from technical observability. It answers a different question: not "is the system healthy?" but <em>"which business rule applied and why?"</em></p>
+                    <p>A stock check rule fires. The system checks: do we have quantity 2 in stock? Answer: yes, we have 5. The traceability layer logs this as a decision point — rule applied, condition met, with a green flag. This is cheap. Your code already evaluates these conditions. You're just <span class="highlight">recording the result</span>.</p>
+                    <p>Record what didn't fire too. When a discount rule doesn't apply because the quantity is below threshold, that's a decision point. When a vendor is skipped because a DTI ratio exceeds their cap, that's a decision point. The negative cases are often where the most valuable insights hide.</p>
+                </div>
+
+                <div class="layer-card">
+                    <div class="layer-card-header">
+                        <span class="layer-card-number">Layer 2</span>
+                    </div>
+                    <h3>Narration</h3>
+                    <p>An LLM reads the traceability data and transforms it into a human-readable explanation. The LLM doesn't make decisions. It narrates what already happened based on the deterministic business logic that fired.</p>
+                    <p>The stock check becomes: "Stock rule applied. Requested quantity: 2. Available quantity: 5. Rule applies because inventory requirement met." A pricing decision becomes a paragraph that any product manager can read and react to — without asking an engineer to interpret the data.</p>
+                    <p>Narration is optional, not required. Business traceability is valuable on its own — engineers, support teams, and technically savvy PMs can read the trace directly. Narration is the enhancement layer that makes traceability legible and actionable to <em>everyone</em>.</p>
+                </div>
+            </div>
+
+            <div class="flow-diagram">
+                <div class="flow-diagram-step">
+                    <div class="flow-diagram-step-label">Your system</div>
+                    <div class="flow-diagram-step-title">Business rule fires</div>
+                </div>
+                <div class="flow-diagram-arrow">&rarr;</div>
+                <div class="flow-diagram-step step-accent">
+                    <div class="flow-diagram-step-label">Layer 1</div>
+                    <div class="flow-diagram-step-title">Traceability recorded</div>
+                </div>
+                <div class="flow-diagram-arrow">&rarr;</div>
+                <div class="flow-diagram-step">
+                    <div class="flow-diagram-step-label">Layer 2 (optional)</div>
+                    <div class="flow-diagram-step-title">LLM narration</div>
+                </div>
+            </div>
+
+            <div class="honest-note">
+                <strong>An honest note:</strong> Narration can paper over bad traceability. If the trace is incomplete or misleading, the narrative will be too. The quality of narration depends entirely on the quality of your business traceability. The Clarity Principle is not a shortcut around good engineering — it's a reward for it.
+            </div>
+
+            <div class="pull-quote">Business traceability shows which rules fired and why. LLM narration makes that visible to everyone. Together, they make business logic a shared artifact — not a black box.</div>
+        </div>
+    </section>
+
+    <!-- The Journey (light-subtle) -->
+    <section class="levels" id="journey">
+        <div class="container">
+            <h2>The journey</h2>
+            <p>Start with traceability. Add narration when you're ready. Each layer compounds the value of the one before it.</p>
+
+            <div class="levels-grid">
+                <div class="level-item">
+                    <div class="level-marker">
+                        <div class="level-number">1</div>
+                        <div class="level-label">Start</div>
+                    </div>
+                    <div class="level-content">
+                        <h3>Add business traceability</h3>
+                        <p>Pick one business decision — pricing, stock check, approval, eligibility. Record which rules fired, which didn't, under what conditions, and what the outcome was. Not technical logs — business decision points. No LLM, no new infrastructure. Your code already evaluates these rules. You're just recording the results.</p>
+                        <p class="level-shift">This alone eliminates the "why did it do that" meeting. Engineers see instantly which rule fired. Support teams can answer questions without escalating. PMs can verify that the system is doing what they intended.</p>
+                    </div>
+                </div>
+
+                <div class="level-item">
+                    <div class="level-marker">
+                        <div class="level-number">2</div>
+                        <div class="level-label">Amplify</div>
+                    </div>
+                    <div class="level-content">
+                        <h3>Add LLM narration</h3>
+                        <p>Connect an LLM to read stored traceability data and generate human-readable explanations. The business rules are already recorded — narration transforms them into language that anyone can read and react to, without domain knowledge or engineering context.</p>
+                        <p class="level-shift">The system becomes self-explaining. From reactive troubleshooting to proactive improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Examples (dark) -->
+    <section class="example" id="example">
+        <div class="container-wide">
+            <h2>See it in action</h2>
+            <p>Two systems, two domains. The Output is what users see today. Traceability shows which business rules fired and why. Add Narration and an LLM transforms that record into plain language.</p>
+
+            <div class="example-tabs">
+                <button class="example-tab active" onclick="switchExample('quoting')">Quoting System</button>
+                <button class="example-tab" onclick="switchExample('finance')">Finance Underwriting</button>
+            </div>
+
+            <!-- Quoting Example -->
+            <div class="example-panel active" id="example-quoting">
+                <div class="example-demo">
+                    <div class="example-demo-header">
+                        <span>Customer Quote</span>
+                        <div class="demo-view-tabs">
+                            <button class="demo-view-tab active" onclick="switchDemoView(this, 'output')">Output</button>
+                            <button class="demo-view-tab" onclick="switchDemoView(this, 'trace')">Traceability</button>
+                            <button class="demo-view-tab" onclick="switchDemoView(this, 'trace-explain')">+ Narration</button>
+                        </div>
+                    </div>
+                    <div class="example-demo-output">
+                        <div class="mono">
+                            Quote #QT-8841<br>
+                            Customer: Meridian Components Ltd.<br>
+                            <br>
+                            Item 1: HX-4420 — Hydraulic Actuator<br>
+                            Condition: SV &nbsp; Qty: 12<br>
+                            Unit Price: $1,245.00<br>
+                            Line Amount: $14,940.00<br>
+                            <br>
+                            Total: $14,940.00
+                        </div>
+                    </div>
+                    <div class="trace-layer">
+                        <div class="trace-layer-inner">
+                            <div class="trace-json">{
+  <span class="json-key">"quote"</span>: <span class="json-string">"QT-8841"</span>,
+  <span class="json-key">"customer"</span>: <span class="json-string">"Meridian Components Ltd."</span>,
+  <span class="json-key">"rules"</span>: [
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"parts_validation"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"part_number"</span>: <span class="json-string">"HX-4420"</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"matched"</span>: <span class="json-bool-true">true</span>, <span class="json-key">"sku"</span>: <span class="json-string">"HYDRAULIC ACTUATOR, 3000PSI, SERVO"</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Part found in main SKU catalog"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"export_control"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"part"</span>: <span class="json-string">"HX-4420"</span>, <span class="json-key">"destination"</span>: <span class="json-string">"UK"</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"cleared"</span>: <span class="json-bool-true">true</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"No export restrictions for this part/destination"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"stock_check"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"part"</span>: <span class="json-string">"HX-4420"</span>, <span class="json-key">"qty_requested"</span>: <span class="json-number">12</span>, <span class="json-key">"condition"</span>: <span class="json-string">"SV"</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"available"</span>: <span class="json-bool-true">true</span>, <span class="json-key">"qty_available"</span>: <span class="json-number">47</span>, <span class="json-key">"warehouses"</span>: [<span class="json-string">"Birmingham"</span>, <span class="json-string">"Rotterdam"</span>, <span class="json-string">"Dallas"</span>] },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Sufficient stock: 47 available across 3 warehouses, 12 requested"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"volume_discount"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"qty_ordered"</span>: <span class="json-number">12</span>, <span class="json-key">"threshold"</span>: <span class="json-number">25</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"discount_pct"</span>: <span class="json-number">0</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-false">false</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Quantity 12 is below the 25-unit minimum for volume discount"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"customer_tier_discount"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"customer_tier"</span>: <span class="json-string">"Standard"</span>, <span class="json-key">"eligible_tiers"</span>: [<span class="json-string">"Gold"</span>, <span class="json-string">"Platinum"</span>] },
+      <span class="json-key">"output"</span>: { <span class="json-key">"discount_pct"</span>: <span class="json-number">0</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-false">false</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Standard tier does not qualify — discount requires Gold or Platinum"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"base_pricing"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"part"</span>: <span class="json-string">"HX-4420"</span>, <span class="json-key">"condition"</span>: <span class="json-string">"SV"</span>, <span class="json-key">"discounts_applied"</span>: <span class="json-number">0</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"unit_price"</span>: <span class="json-number">1245.00</span>, <span class="json-key">"line_total"</span>: <span class="json-number">14940.00</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Base price from SV condition price list, no discounts applied"</span>
+    }
+  ]
+}</div>
+                        </div>
+                    </div>
+                    <div class="narration-block">
+                        <div class="narration-block-inner">
+                            <div class="narration-label">LLM Narration</div>
+                            <div class="narration-rules">
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Fired</span>
+                                        <span class="narration-rule-name">Parts Validation</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">HX-4420 was found in the main SKU catalog. The part is a Hydraulic Actuator, 3000PSI, Servo variant. Part is valid and quotable.</div>
+                                </div>
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Fired</span>
+                                        <span class="narration-rule-name">Export Control</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">No export restrictions apply for this part to the customer's destination (UK). Clearance granted.</div>
+                                </div>
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Fired</span>
+                                        <span class="narration-rule-name">Stock Check</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">Customer requested 12 units in SV condition. 47 units available across three warehouses (Birmingham, Rotterdam, Dallas). Stock requirement met.</div>
+                                </div>
+                                <div class="narration-rule rule-not-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-skip">Did not fire</span>
+                                        <span class="narration-rule-name">Volume Discount</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">The customer ordered 12 units. The volume discount requires a minimum of 25 units. The rule did not fire because the quantity is 13 units below the threshold. If the customer increases to 25, the discount would activate.</div>
+                                </div>
+                                <div class="narration-rule rule-not-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-skip">Did not fire</span>
+                                        <span class="narration-rule-name">Customer Tier Discount</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">Meridian Components is on the Standard tier. Tier discounts are only available to Gold and Platinum customers. No discount applies at this level.</div>
+                                </div>
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Fired</span>
+                                        <span class="narration-rule-name">Base Pricing</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">Unit price of $1,245.00 sourced from the SV condition price list. No discounts were applied, so the base price is the final price. Line total: $14,940.00.</div>
+                                </div>
+                            </div>
+                            <div class="narration-summary">
+                                <div class="narration-summary-label">Summary</div>
+                                Six business rules were evaluated for this quote. Four fired successfully — parts validation, export control, stock check, and base pricing. Two did not fire — volume discount (quantity 12 is below the 25-unit threshold) and customer tier discount (Standard tier does not qualify). The final price of $1,245.00 per unit reflects the base price with no discounts applied. The customer could unlock the volume discount by increasing the order to 25 units.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="surfaces">
+                    <p>The output tells you what happened. Traceability gives you the raw decision record — every rule, its inputs, whether it fired, and why. Narration takes each rule and explains it in plain language, with a summary any stakeholder can read and react to.</p>
+                </div>
+            </div>
+
+            <!-- Finance Underwriting Example -->
+            <div class="example-panel" id="example-finance">
+                <div class="example-demo">
+                    <div class="example-demo-header">
+                        <span>Finance Decision</span>
+                        <div class="demo-view-tabs">
+                            <button class="demo-view-tab active" onclick="switchDemoView(this, 'output')">Output</button>
+                            <button class="demo-view-tab" onclick="switchDemoView(this, 'trace')">Traceability</button>
+                            <button class="demo-view-tab" onclick="switchDemoView(this, 'trace-explain')">+ Narration</button>
+                        </div>
+                    </div>
+                    <div class="example-demo-output">
+                        <div class="mono">
+                            Application #FA-20261<br>
+                            Applicant: Sarah Mitchell<br>
+                            Vehicle: 2025 BMW 330i<br>
+                            Requested Amount: $42,500<br>
+                            <br>
+                            Approved: $38,200<br>
+                            Term: 60 months<br>
+                            Rate: 6.9% APR
+                        </div>
+                    </div>
+                    <div class="trace-layer">
+                        <div class="trace-layer-inner">
+                            <div class="trace-json">{
+  <span class="json-key">"application"</span>: <span class="json-string">"FA-20261"</span>,
+  <span class="json-key">"applicant"</span>: <span class="json-string">"Sarah Mitchell"</span>,
+  <span class="json-key">"rules"</span>: [
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"credit_scoring"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"credit_score"</span>: <span class="json-number">712</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"tier"</span>: <span class="json-number">2</span>, <span class="json-key">"band"</span>: <span class="json-string">"700-749"</span>, <span class="json-key">"rating"</span>: <span class="json-string">"Good"</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Score 712 falls in tier-2 band (700-749)"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"employment_verification"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"status"</span>: <span class="json-string">"employed"</span>, <span class="json-key">"tenure_years"</span>: <span class="json-number">3</span>, <span class="json-key">"min_required"</span>: <span class="json-number">1</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"verified"</span>: <span class="json-bool-true">true</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"3 years tenure exceeds 1-year minimum stability requirement"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"vendor_eligibility_premier"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"dti_ratio"</span>: <span class="json-number">0.34</span>, <span class="json-key">"vendor_dti_cap"</span>: <span class="json-number">0.32</span>, <span class="json-key">"credit_tier"</span>: <span class="json-number">2</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"eligible"</span>: <span class="json-bool-false">false</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-false">false</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"DTI 34% exceeds Premier's 32% cap for tier-2 credit scores"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"vendor_eligibility_national"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"dti_ratio"</span>: <span class="json-number">0.34</span>, <span class="json-key">"vendor_dti_cap"</span>: <span class="json-number">0.38</span>, <span class="json-key">"credit_tier"</span>: <span class="json-number">2</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"eligible"</span>: <span class="json-bool-true">true</span>, <span class="json-key">"approved_amount"</span>: <span class="json-number">38200</span>, <span class="json-key">"rate"</span>: <span class="json-number">6.9</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"DTI 34% within National Credit's 38% cap. Tier-B rate applied."</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"vendor_eligibility_keystone"</span>,
+      <span class="json-key">"input"</span>: <span class="json-null">null</span>,
+      <span class="json-key">"output"</span>: <span class="json-null">null</span>,
+      <span class="json-key">"fired"</span>: <span class="json-bool-false">false</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Waterfall stopped — National Credit approved before Keystone was evaluated"</span>
+    },
+    {
+      <span class="json-key">"rule"</span>: <span class="json-string">"ltv_cap"</span>,
+      <span class="json-key">"input"</span>: { <span class="json-key">"requested"</span>: <span class="json-number">42500</span>, <span class="json-key">"vehicle_value"</span>: <span class="json-number">42450</span>, <span class="json-key">"max_ltv"</span>: <span class="json-number">0.90</span> },
+      <span class="json-key">"output"</span>: { <span class="json-key">"approved_amount"</span>: <span class="json-number">38200</span>, <span class="json-key">"reduced"</span>: <span class="json-bool-true">true</span> },
+      <span class="json-key">"fired"</span>: <span class="json-bool-true">true</span>,
+      <span class="json-key">"reason"</span>: <span class="json-string">"Requested $42,500 exceeds 90% of vehicle value ($42,450). Capped at $38,205, rounded to $38,200."</span>
+    }
+  ]
+}</div>
+                        </div>
+                    </div>
+                    <div class="narration-block">
+                        <div class="narration-block-inner">
+                            <div class="narration-label">LLM Narration</div>
+                            <div class="narration-rules">
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Fired</span>
+                                        <span class="narration-rule-name">Credit Scoring</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">Sarah Mitchell's credit score of 712 places her in tier-2 (the 700-749 band), rated "Good." This tier determines which vendors she's eligible for and what rates apply.</div>
+                                </div>
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Fired</span>
+                                        <span class="narration-rule-name">Employment Verification</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">Employment verified with 3 years tenure, which exceeds the 1-year minimum stability requirement. No issues here.</div>
+                                </div>
+                                <div class="narration-rule rule-not-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-fail">Declined</span>
+                                        <span class="narration-rule-name">Premier Auto Finance — Vendor Eligibility</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">Premier Auto Finance declined because the applicant's debt-to-income ratio of 34% exceeds their 32% cap for tier-2 credit scores. The applicant is just 2 percentage points above Premier's threshold — if DTI were lower, Premier would likely have offered a more competitive rate.</div>
+                                </div>
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Approved</span>
+                                        <span class="narration-rule-name">National Credit Corp — Vendor Eligibility</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">National Credit Corp accepted the application. Their DTI threshold for tier-2 is 38%, and the applicant's 34% falls within that limit. Tier-B rate of 6.9% APR applied for the 700-749 score band.</div>
+                                </div>
+                                <div class="narration-rule rule-not-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-skip">Not evaluated</span>
+                                        <span class="narration-rule-name">Keystone Lending — Vendor Eligibility</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">Keystone Lending was never evaluated. The vendor waterfall stops at the first approval, and National Credit Corp approved before Keystone was reached.</div>
+                                </div>
+                                <div class="narration-rule rule-fired">
+                                    <div class="narration-rule-header">
+                                        <span class="flow-badge flow-badge-pass">Fired</span>
+                                        <span class="narration-rule-name">LTV Cap</span>
+                                    </div>
+                                    <div class="narration-rule-explanation">The requested amount of $42,500 was reduced to $38,200. The vehicle is valued at $42,450, and the maximum loan-to-value ratio is 90%, capping the approved amount at $38,205 (rounded to $38,200).</div>
+                                </div>
+                            </div>
+                            <div class="narration-summary">
+                                <div class="narration-summary-label">Summary</div>
+                                Six business rules were evaluated. Credit scoring and employment verification passed without issue. Premier Auto Finance declined due to a DTI ratio 2 points above their cap — the closest miss in the waterfall. National Credit Corp accepted under their more permissive DTI threshold and applied their tier-B rate of 6.9%. Keystone Lending was never reached. The LTV cap rule reduced the approved amount from $42,500 to $38,200. Final outcome: approved at $38,200 for 60 months at 6.9% APR through National Credit Corp.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="surfaces">
+                    <p>The output tells you what happened. Traceability gives you the raw decision record — Premier's DTI cap, National Credit's acceptance, the LTV reduction. Narration explains each rule in plain language, with a summary that makes the entire decision legible to anyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function switchExample(name) {
+            document.querySelectorAll('.example-panel').forEach(function(p) { p.classList.remove('active'); });
+            document.querySelectorAll('.example-tab').forEach(function(t) { t.classList.remove('active'); });
+            // Reset all demos to output view
+            document.querySelectorAll('.example-demo').forEach(function(d) {
+                d.classList.remove('view-trace', 'view-trace-explain');
+            });
+            document.querySelectorAll('.demo-view-tab').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            document.querySelectorAll('.demo-view-tab:first-child').forEach(function(t) {
+                t.classList.add('active');
+            });
+            document.getElementById('example-' + name).classList.add('active');
+            document.querySelector('[onclick="switchExample(\'' + name + '\')"]').classList.add('active');
+        }
+
+        function switchDemoView(button, view) {
+            var demo = button.closest('.example-demo');
+            // Remove all view classes
+            demo.classList.remove('view-trace', 'view-trace-explain');
+            // Remove active from sibling tabs
+            button.parentElement.querySelectorAll('.demo-view-tab').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            // Set active tab
+            button.classList.add('active');
+            // Apply view class
+            if (view === 'trace') {
+                demo.classList.add('view-trace');
+            } else if (view === 'trace-explain') {
+                demo.classList.add('view-trace-explain');
+            }
+        }
+    </script>
+
+    <!-- The Four Values (light) -->
+    <section id="values">
+        <div class="container-wide">
+            <h2>What it delivers</h2>
+
+            <div class="values-grid">
+                <div class="value-item">
+                    <div class="value-number">1</div>
+                    <h3>Accelerated conversation</h3>
+                    <p>Every decision comes with a record of which rules fired and why. Product managers and engineers start from the same understanding instead of translating between different views of the system.</p>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-number">2</div>
+                    <h3>Live audit trail</h3>
+                    <p>Every business rule firing is recorded at the moment it happens — not reconstructed after the fact. The traceability record is compliance-ready and tied directly to the system state that produced it.</p>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-number">3</div>
+                    <h3>Visible business logic</h3>
+                    <p>Stakeholders see which rules applied by reading the traceability data directly — or through LLM narration if they prefer plain language. The rules your system applies become legible to anyone.</p>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-number">4</div>
+                    <h3>Internal adoption and advocacy</h3>
+                    <p>When people can see which business rules are firing and why, they trust the system. When they trust it, they advocate for it. Clarity turns internal tools from black boxes into systems that teams are proud to use.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Changes for Product Managers (light) -->
+    <section class="for-pms" id="for-pms">
+        <div class="container">
+            <h2>What changes for product managers</h2>
+            <p>You stop being the translation layer.</p>
+            <p>Today: a stakeholder asks "why did the system do that?" You open Slack, find an engineer, wait. The engineer traces through code, finds the answer, explains it to you, you translate it back to the stakeholder. Forty-five minutes for a 30-second answer.</p>
+            <p>With <span class="highlight">business traceability</span>: the answer is already there. You can see which rules fired, under what conditions, and what the outcome was. Need it in plain language? The LLM narration layer transforms the traceability data into an explanation any stakeholder can read.</p>
+            <p>The shift is fundamental: from reactive troubleshooting to proactive improvement. You're not waiting for problems to bubble up through support tickets and escalations. You're reading which business rules fired and asking better questions — before the edge case becomes a customer complaint.</p>
+        </div>
+    </section>
+
+    <!-- How to Get Started (dark) -->
+    <section class="section-dark" id="get-started">
+        <div class="container">
+            <h2>How to get started</h2>
+            <p>You don't need a platform. You don't need an LLM to start. You need one business rule and the decision to record when it fires.</p>
+
+            <div class="levels-grid">
+                <div class="level-item">
+                    <div class="level-marker">
+                        <div class="level-number">1</div>
+                        <div class="level-label">Step</div>
+                    </div>
+                    <div class="level-content">
+                        <h3>Pick one business rule</h3>
+                        <p>A stock check, a pricing rule, an eligibility gate, an approval threshold. Start with one rule that people already ask "why did it do that?" about.</p>
+                    </div>
+                </div>
+
+                <div class="level-item">
+                    <div class="level-marker">
+                        <div class="level-number">2</div>
+                        <div class="level-label">Step</div>
+                    </div>
+                    <div class="level-content">
+                        <h3>Record when it fires</h3>
+                        <p>Log which rule fired, what conditions it evaluated, and what the outcome was. Not a technical log — a business decision record. Your code already evaluates these conditions. Just persist the result.</p>
+                    </div>
+                </div>
+
+                <div class="level-item">
+                    <div class="level-marker">
+                        <div class="level-number">3</div>
+                        <div class="level-label">Step</div>
+                    </div>
+                    <div class="level-content">
+                        <h3>Make it visible</h3>
+                        <p>Expose the traceability data inside your application. A button, an admin panel, a support tool. Let the people who ask "why?" see which rules fired directly.</p>
+                    </div>
+                </div>
+
+                <div class="level-item">
+                    <div class="level-marker">
+                        <div class="level-number">4</div>
+                        <div class="level-label">Step</div>
+                    </div>
+                    <div class="level-content">
+                        <h3>Add LLM narration</h3>
+                        <p>Connect an LLM to read the traceability data and generate human-readable explanations. The prompt is a config artifact — version it, tune it, treat it like code. This is optional but powerful.</p>
+                    </div>
+                </div>
+
+                <div class="level-item">
+                    <div class="level-marker">
+                        <div class="level-number">5</div>
+                        <div class="level-label">Step</div>
+                    </div>
+                    <div class="level-content">
+                        <h3>Expand</h3>
+                        <p>Next rule, then the next. The system progressively builds a complete picture of its own business logic — visible to anyone who needs it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coming Soon (light) -->
+    <section class="coming-soon" id="agents">
+        <div class="container">
+            <h2>Coming soon — AI agents</h2>
+            <p>We are building agents that bring <span class="highlight">business traceability</span> directly into your development workflow.</p>
+
+            <div class="agent-cards">
+                <div class="agent-card">
+                    <div class="badge">Coming soon</div>
+                    <h3>Claude Code agent</h3>
+                    <p>An agent that reads your codebase, identifies where business rules are firing, and suggests where traceability should be added — with implementation guidance tailored to your architecture.</p>
+                </div>
+
+                <div class="agent-card">
+                    <div class="badge">Coming soon</div>
+                    <h3>Cursor agent</h3>
+                    <p>The same analysis, integrated into Cursor. Surfaces business decision points in your code and helps you add traceability without disrupting your existing patterns.</p>
+                </div>
+            </div>
+
+            <a href="https://github.com/FarabiInnovations/clarity-principle" class="btn btn-outline">Follow on GitHub for updates</a>
+        </div>
+    </section>
+
+    <!-- GitHub (dark) -->
+    <section class="github-section" id="github">
+        <div class="container">
+            <h2>Open source</h2>
+            <p>The Clarity Principle is open source. Explore the principle, contribute examples, or build on it.</p>
+            <a href="https://github.com/FarabiInnovations/clarity-principle" class="btn btn-on-dark">View the repository</a>
+        </div>
+    </section>
+
+    <!-- About (light) -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About</h2>
+            <div class="about-content">
+                <div>
+                    <p><strong>Rabea Abdelwahab</strong> — Software engineer and product thinker building at the intersection of enterprise systems and AI. The Clarity Principle grew out of years spent watching business logic disappear into code that only its authors could read.</p>
+                    <div class="about-links">
+                        <a href="https://www.linkedin.com/in/rabeawahab/">LinkedIn</a>
+                        <a href="https://github.com/RabeaWahab">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Clarity Principle — an open source design principle by Rabea Abdelwahab</p>
+        </div>
+    </footer>
+
+</body>
+</html>
