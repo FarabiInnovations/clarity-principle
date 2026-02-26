@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clarity Principle — Make business logic visible through traceability and narration</title>
-    <meta name="description" content="The Clarity Principle: make business logic visible through two layers — business traceability to record which rules fired and why, and LLM narration to make it legible to everyone.">
+    <title>Clarity Principle: Make business logic visible through traceability and narration</title>
+    <meta name="description" content="The Clarity Principle: make business logic visible through two layers, business traceability to record which rules fired and why, and LLM narration to make it legible to everyone.">
     <style>
         *, *::before, *::after {
             margin: 0;
@@ -1290,9 +1290,8 @@
             <div class="nav-links">
                 <a href="#problem" class="nav-link">Problem</a>
                 <a href="#two-layers" class="nav-link">Two Layers</a>
-                <a href="#example" class="nav-link">Example</a>
+                <a href="#example" class="nav-link">Examples</a>
                 <a href="#values" class="nav-link">Values</a>
-                <a href="#for-pms" class="nav-link">For PMs</a>
                 <a href="#get-started" class="nav-link">Get Started</a>
                 <a href="https://github.com/FarabiInnovations/clarity-principle" class="nav-link">GitHub</a>
             </div>
@@ -1301,9 +1300,9 @@
 
     <!-- Hero (dark) -->
     <section class="hero">
-        <div class="container">
+        <div class="container-wide">
             <h1>Business logic should<br>be visible to everyone<br>who depends on it.</h1>
-            <p><strong style="color: var(--color-text-on-dark);">The Clarity Principle</strong> — make business logic visible through two layers. <span class="highlight">Business traceability</span> records which rules fired, under what conditions, and what the outcome was. <span class="highlight">Narration</span> uses an LLM to transform that traceability data into human-readable explanations. Traceability is valuable on its own. Narration amplifies it.</p>
+            <p><strong style="color: var(--color-text-on-dark);">The Clarity Principle:</strong> make business logic visible through two layers. <span class="highlight">Business traceability</span> records which rules fired, under what conditions, and what the outcome was. <span class="highlight">Narration</span> uses an LLM to transform that traceability data into human-readable explanations. Traceability is valuable on its own. Narration amplifies it.</p>
             <p class="audience">For <strong>product managers</strong>, <strong>engineers</strong>, <strong>CTOs</strong>, and anyone who needs to understand what a system is deciding and why.</p>
             <a href="https://github.com/FarabiInnovations/clarity-principle" class="btn btn-on-dark">View on GitHub</a>
         </div>
@@ -1311,10 +1310,10 @@
 
     <!-- The Problem (light) -->
     <section class="problem" id="problem">
-        <div class="container">
+        <div class="container-wide">
             <h2>The problem</h2>
             <p>A support call comes in. The customer's quote looks wrong. A Slack thread starts. An engineer traces through the code. Forty-five minutes later, the answer is a 30-second explanation: a discount rule didn't fire because the quantity was one unit below the threshold. The system knew this the entire time. It just didn't record which business rules fired or why.</p>
-            <p>This is not a tooling problem. It's a design problem. Your system makes hundreds of business decisions every day — pricing rules, eligibility checks, approval workflows — but it only records the outcome. Which rules fired? Which didn't? Under what conditions? That information exists for a moment inside the running code, then it's gone. Product managers become the translation layer because the system was never designed to show its own reasoning.</p>
+            <p>This is not a tooling problem. It's a design problem. Your system makes hundreds of business decisions every day (pricing rules, eligibility checks, approval workflows) but it only records the outcome. Which rules fired? Which didn't? Under what conditions? That information exists for a moment inside the running code, then it's gone. Product managers become the translation layer because the system was never designed to show its own reasoning.</p>
             <p>The cost compounds: edge cases discovered weeks late. Support escalations that could have been self-service. Requirement refinements that start from scratch every time because there is no shared artifact showing which business rules actually applied and why.</p>
         </div>
     </section>
@@ -1346,7 +1345,7 @@
                     </div>
                     <div class="comparison-row">
                         <div class="comparison-row-label">Ceiling</div>
-                        Compliance. Valuable, necessary — but that's where it stops.
+                        Compliance. Valuable, necessary, but that's where it stops.
                     </div>
                 </div>
 
@@ -1382,7 +1381,7 @@
                     </div>
                     <div class="comparison-row">
                         <div class="comparison-row-label">Audience</div>
-                        The person doing the work — sales, procurement, product, customer success
+                        The person doing the work: sales, procurement, product, customer success
                     </div>
                     <div class="comparison-row">
                         <div class="comparison-row-label">Orientation</div>
@@ -1399,19 +1398,19 @@
                 </div>
             </div>
 
-            <div class="one-liner">Audit trails prove what happened. Logs diagnose what went wrong. Business traceability records which rules fired and why — and LLM narration makes that record legible to anyone.</div>
+            <div class="one-liner">Audit trails prove what happened. Logs diagnose what went wrong. Business traceability records which rules fired and why. LLM narration makes that record legible to anyone.</div>
 
             <div class="complement-note">
                 <h3>This isn't a new concept</h3>
-                <p>Business traceability itself is not new. Rules engines like Drools have provided rule-level traceability for years — you can see which rules fired and in what order. Decision tables, custom rule frameworks, even well-structured logging can capture decision points.</p>
-                <p>What's new is <em>narration</em>. Before LLMs, traceability data was only useful to engineers who understood the system's internals. Making that data legible to product managers, support teams, and business stakeholders required building custom UIs or writing documentation that went stale immediately. LLMs changed the economics: they can read structured traceability data and produce a human-readable explanation — cheaply, on demand, at the moment someone asks. That's what makes the full value of business traceability practical for enterprise SaaS applications.</p>
+                <p>Business traceability itself is not new. Rules engines like Drools have provided rule-level traceability for years. You can see which rules fired and in what order. Decision tables, custom rule frameworks, even well-structured logging can capture decision points.</p>
+                <p>What's new is <em>narration</em>. Before LLMs, traceability data was only useful to engineers who understood the system's internals. Making that data legible to product managers, support teams, and business stakeholders required building custom UIs or writing documentation that went stale immediately. LLMs changed the economics: they can read structured traceability data and produce a human-readable explanation, cheaply, on demand, at the moment someone asks. That's what makes the full value of business traceability practical for enterprise SaaS applications.</p>
             </div>
         </div>
     </section>
 
     <!-- The Two Layers (light) -->
     <section id="two-layers">
-        <div class="container">
+        <div class="container-wide">
             <h2>The two layers</h2>
             <p>The Clarity Principle is built on two foundational layers. The first is valuable on its own. The second amplifies it.</p>
 
@@ -1422,7 +1421,7 @@
                     </div>
                     <h3>Business traceability</h3>
                     <p>Record which business rules fired, under what conditions, and what the outcome was. This is separate from technical observability. It answers a different question: not "is the system healthy?" but <em>"which business rule applied and why?"</em></p>
-                    <p>A stock check rule fires. The system checks: do we have quantity 2 in stock? Answer: yes, we have 5. The traceability layer logs this as a decision point — rule applied, condition met, with a green flag. This is cheap. Your code already evaluates these conditions. You're just <span class="highlight">recording the result</span>.</p>
+                    <p>A stock check rule fires. The system checks: do we have quantity 2 in stock? Answer: yes, we have 5. The traceability layer logs this as a decision point: rule applied, condition met, with a green flag. This is cheap. Your code already evaluates these conditions. You're just <span class="highlight">recording the result</span>.</p>
                     <p>Record what didn't fire too. When a discount rule doesn't apply because the quantity is below threshold, that's a decision point. When a vendor is skipped because a DTI ratio exceeds their cap, that's a decision point. The negative cases are often where the most valuable insights hide.</p>
                 </div>
 
@@ -1432,8 +1431,8 @@
                     </div>
                     <h3>Narration</h3>
                     <p>An LLM reads the traceability data and transforms it into a human-readable explanation. The LLM doesn't make decisions. It narrates what already happened based on the deterministic business logic that fired.</p>
-                    <p>The stock check becomes: "Stock rule applied. Requested quantity: 2. Available quantity: 5. Rule applies because inventory requirement met." A pricing decision becomes a paragraph that any product manager can read and react to — without asking an engineer to interpret the data.</p>
-                    <p>Narration is optional, not required. Business traceability is valuable on its own — engineers, support teams, and technically savvy PMs can read the trace directly. Narration is the enhancement layer that makes traceability legible and actionable to <em>everyone</em>.</p>
+                    <p>The stock check becomes: "Stock rule applied. Requested quantity: 2. Available quantity: 5. Rule applies because inventory requirement met." A pricing decision becomes a paragraph that any product manager can read and react to, without asking an engineer to interpret the data.</p>
+                    <p>Narration is optional, not required. Business traceability is valuable on its own. Engineers, support teams, and technically savvy PMs can read the trace directly. Narration is the enhancement layer that makes traceability legible and actionable to <em>everyone</em>.</p>
                 </div>
             </div>
 
@@ -1455,16 +1454,16 @@
             </div>
 
             <div class="honest-note">
-                <strong>An honest note:</strong> Narration can paper over bad traceability. If the trace is incomplete or misleading, the narrative will be too. The quality of narration depends entirely on the quality of your business traceability. The Clarity Principle is not a shortcut around good engineering — it's a reward for it.
+                <strong>An honest note:</strong> Narration can paper over bad traceability. If the trace is incomplete or misleading, the narrative will be too. The quality of narration depends entirely on the quality of your business traceability. The Clarity Principle is not a shortcut around good engineering. It's a reward for it.
             </div>
 
-            <div class="pull-quote">Business traceability shows which rules fired and why. LLM narration makes that visible to everyone. Together, they make business logic a shared artifact — not a black box.</div>
+            <div class="pull-quote">Business traceability shows which rules fired and why. LLM narration makes that visible to everyone. Together, they make business logic a shared artifact, not a black box.</div>
         </div>
     </section>
 
     <!-- The Journey (light-subtle) -->
     <section class="levels" id="journey">
-        <div class="container">
+        <div class="container-wide">
             <h2>The journey</h2>
             <p>Start with traceability. Add narration when you're ready. Each layer compounds the value of the one before it.</p>
 
@@ -1476,7 +1475,7 @@
                     </div>
                     <div class="level-content">
                         <h3>Add business traceability</h3>
-                        <p>Pick one business decision — pricing, stock check, approval, eligibility. Record which rules fired, which didn't, under what conditions, and what the outcome was. Not technical logs — business decision points. No LLM, no new infrastructure. Your code already evaluates these rules. You're just recording the results.</p>
+                        <p>Pick one business decision: pricing, stock check, approval, eligibility. Record which rules fired, which didn't, under what conditions, and what the outcome was. Not technical logs. Business decision points. No LLM, no new infrastructure. Your code already evaluates these rules. You're just recording the results.</p>
                         <p class="level-shift">This alone eliminates the "why did it do that" meeting. Engineers see instantly which rule fired. Support teams can answer questions without escalating. PMs can verify that the system is doing what they intended.</p>
                     </div>
                 </div>
@@ -1488,7 +1487,7 @@
                     </div>
                     <div class="level-content">
                         <h3>Add LLM narration</h3>
-                        <p>Connect an LLM to read stored traceability data and generate human-readable explanations. The business rules are already recorded — narration transforms them into language that anyone can read and react to, without domain knowledge or engineering context.</p>
+                        <p>Connect an LLM to read stored traceability data and generate human-readable explanations. The business rules are already recorded. Narration transforms them into language that anyone can read and react to, without domain knowledge.</p>
                         <p class="level-shift">The system becomes self-explaining. From reactive troubleshooting to proactive improvement.</p>
                     </div>
                 </div>
@@ -1523,7 +1522,7 @@
                             Quote #QT-8841<br>
                             Customer: Meridian Components Ltd.<br>
                             <br>
-                            Item 1: HX-4420 — Hydraulic Actuator<br>
+                            Item 1: HX-4420, Hydraulic Actuator<br>
                             Condition: SV &nbsp; Qty: 12<br>
                             Unit Price: $1,245.00<br>
                             Line Amount: $14,940.00<br>
@@ -1570,7 +1569,7 @@
       <span class="json-key">"input"</span>: { <span class="json-key">"customer_tier"</span>: <span class="json-string">"Standard"</span>, <span class="json-key">"eligible_tiers"</span>: [<span class="json-string">"Gold"</span>, <span class="json-string">"Platinum"</span>] },
       <span class="json-key">"output"</span>: { <span class="json-key">"discount_pct"</span>: <span class="json-number">0</span> },
       <span class="json-key">"fired"</span>: <span class="json-bool-false">false</span>,
-      <span class="json-key">"reason"</span>: <span class="json-string">"Standard tier does not qualify — discount requires Gold or Platinum"</span>
+      <span class="json-key">"reason"</span>: <span class="json-string">"Standard tier does not qualify. Discount requires Gold or Platinum."</span>
     },
     {
       <span class="json-key">"rule"</span>: <span class="json-string">"base_pricing"</span>,
@@ -1632,14 +1631,14 @@
                             </div>
                             <div class="narration-summary">
                                 <div class="narration-summary-label">Summary</div>
-                                Six business rules were evaluated for this quote. Four fired successfully — parts validation, export control, stock check, and base pricing. Two did not fire — volume discount (quantity 12 is below the 25-unit threshold) and customer tier discount (Standard tier does not qualify). The final price of $1,245.00 per unit reflects the base price with no discounts applied. The customer could unlock the volume discount by increasing the order to 25 units.
+                                Six business rules were evaluated for this quote. Four fired successfully: parts validation, export control, stock check, and base pricing. Two did not fire: volume discount (quantity 12 is below the 25-unit threshold) and customer tier discount (Standard tier does not qualify). The final price of $1,245.00 per unit reflects the base price with no discounts applied. The customer could unlock the volume discount by increasing the order to 25 units.
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="surfaces">
-                    <p>The output tells you what happened. Traceability gives you the raw decision record — every rule, its inputs, whether it fired, and why. Narration takes each rule and explains it in plain language, with a summary any stakeholder can read and react to.</p>
+                    <p>The output tells you what happened. Traceability gives you the raw decision record: every rule, its inputs, whether it fired, and why. Narration takes each rule and explains it in plain language, with a summary any stakeholder can read and react to.</p>
                 </div>
             </div>
 
@@ -1705,7 +1704,7 @@
       <span class="json-key">"input"</span>: <span class="json-null">null</span>,
       <span class="json-key">"output"</span>: <span class="json-null">null</span>,
       <span class="json-key">"fired"</span>: <span class="json-bool-false">false</span>,
-      <span class="json-key">"reason"</span>: <span class="json-string">"Waterfall stopped — National Credit approved before Keystone was evaluated"</span>
+      <span class="json-key">"reason"</span>: <span class="json-string">"Waterfall stopped. National Credit approved before Keystone was evaluated."</span>
     },
     {
       <span class="json-key">"rule"</span>: <span class="json-string">"ltv_cap"</span>,
@@ -1739,21 +1738,21 @@
                                 <div class="narration-rule rule-not-fired">
                                     <div class="narration-rule-header">
                                         <span class="flow-badge flow-badge-fail">Declined</span>
-                                        <span class="narration-rule-name">Premier Auto Finance — Vendor Eligibility</span>
+                                        <span class="narration-rule-name">Premier Auto Finance, Vendor Eligibility</span>
                                     </div>
-                                    <div class="narration-rule-explanation">Premier Auto Finance declined because the applicant's debt-to-income ratio of 34% exceeds their 32% cap for tier-2 credit scores. The applicant is just 2 percentage points above Premier's threshold — if DTI were lower, Premier would likely have offered a more competitive rate.</div>
+                                    <div class="narration-rule-explanation">Premier Auto Finance declined because the applicant's debt-to-income ratio of 34% exceeds their 32% cap for tier-2 credit scores. The applicant is just 2 percentage points above Premier's threshold. If DTI were lower, Premier would likely have offered a more competitive rate.</div>
                                 </div>
                                 <div class="narration-rule rule-fired">
                                     <div class="narration-rule-header">
                                         <span class="flow-badge flow-badge-pass">Approved</span>
-                                        <span class="narration-rule-name">National Credit Corp — Vendor Eligibility</span>
+                                        <span class="narration-rule-name">National Credit Corp, Vendor Eligibility</span>
                                     </div>
                                     <div class="narration-rule-explanation">National Credit Corp accepted the application. Their DTI threshold for tier-2 is 38%, and the applicant's 34% falls within that limit. Tier-B rate of 6.9% APR applied for the 700-749 score band.</div>
                                 </div>
                                 <div class="narration-rule rule-not-fired">
                                     <div class="narration-rule-header">
                                         <span class="flow-badge flow-badge-skip">Not evaluated</span>
-                                        <span class="narration-rule-name">Keystone Lending — Vendor Eligibility</span>
+                                        <span class="narration-rule-name">Keystone Lending, Vendor Eligibility</span>
                                     </div>
                                     <div class="narration-rule-explanation">Keystone Lending was never evaluated. The vendor waterfall stops at the first approval, and National Credit Corp approved before Keystone was reached.</div>
                                 </div>
@@ -1767,14 +1766,14 @@
                             </div>
                             <div class="narration-summary">
                                 <div class="narration-summary-label">Summary</div>
-                                Six business rules were evaluated. Credit scoring and employment verification passed without issue. Premier Auto Finance declined due to a DTI ratio 2 points above their cap — the closest miss in the waterfall. National Credit Corp accepted under their more permissive DTI threshold and applied their tier-B rate of 6.9%. Keystone Lending was never reached. The LTV cap rule reduced the approved amount from $42,500 to $38,200. Final outcome: approved at $38,200 for 60 months at 6.9% APR through National Credit Corp.
+                                Six business rules were evaluated. Credit scoring and employment verification passed without issue. Premier Auto Finance declined due to a DTI ratio 2 points above their cap, the closest miss in the waterfall. National Credit Corp accepted under their more permissive DTI threshold and applied their tier-B rate of 6.9%. Keystone Lending was never reached. The LTV cap rule reduced the approved amount from $42,500 to $38,200. Final outcome: approved at $38,200 for 60 months at 6.9% APR through National Credit Corp.
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="surfaces">
-                    <p>The output tells you what happened. Traceability gives you the raw decision record — Premier's DTI cap, National Credit's acceptance, the LTV reduction. Narration explains each rule in plain language, with a summary that makes the entire decision legible to anyone.</p>
+                    <p>The output tells you what happened. Traceability gives you the raw decision record: Premier's DTI cap, National Credit's acceptance, the LTV reduction. Narration explains each rule in plain language, with a summary that makes the entire decision legible to anyone.</p>
                 </div>
             </div>
         </div>
@@ -1832,13 +1831,13 @@
                 <div class="value-item">
                     <div class="value-number">2</div>
                     <h3>Live audit trail</h3>
-                    <p>Every business rule firing is recorded at the moment it happens — not reconstructed after the fact. The traceability record is compliance-ready and tied directly to the system state that produced it.</p>
+                    <p>Every business rule firing is recorded at the moment it happens, not reconstructed after the fact. The traceability record is compliance-ready and tied directly to the system state that produced it.</p>
                 </div>
 
                 <div class="value-item">
                     <div class="value-number">3</div>
                     <h3>Visible business logic</h3>
-                    <p>Stakeholders see which rules applied by reading the traceability data directly — or through LLM narration if they prefer plain language. The rules your system applies become legible to anyone.</p>
+                    <p>Stakeholders see which rules applied by reading the traceability data directly, or through LLM narration if they prefer plain language. The rules your system applies become legible to anyone.</p>
                 </div>
 
                 <div class="value-item">
@@ -1850,20 +1849,9 @@
         </div>
     </section>
 
-    <!-- What Changes for Product Managers (light) -->
-    <section class="for-pms" id="for-pms">
-        <div class="container">
-            <h2>What changes for product managers</h2>
-            <p>You stop being the translation layer.</p>
-            <p>Today: a stakeholder asks "why did the system do that?" You open Slack, find an engineer, wait. The engineer traces through code, finds the answer, explains it to you, you translate it back to the stakeholder. Forty-five minutes for a 30-second answer.</p>
-            <p>With <span class="highlight">business traceability</span>: the answer is already there. You can see which rules fired, under what conditions, and what the outcome was. Need it in plain language? The LLM narration layer transforms the traceability data into an explanation any stakeholder can read.</p>
-            <p>The shift is fundamental: from reactive troubleshooting to proactive improvement. You're not waiting for problems to bubble up through support tickets and escalations. You're reading which business rules fired and asking better questions — before the edge case becomes a customer complaint.</p>
-        </div>
-    </section>
-
     <!-- How to Get Started (dark) -->
     <section class="section-dark" id="get-started">
-        <div class="container">
+        <div class="container-wide">
             <h2>How to get started</h2>
             <p>You don't need a platform. You don't need an LLM to start. You need one business rule and the decision to record when it fires.</p>
 
@@ -1886,7 +1874,7 @@
                     </div>
                     <div class="level-content">
                         <h3>Record when it fires</h3>
-                        <p>Log which rule fired, what conditions it evaluated, and what the outcome was. Not a technical log — a business decision record. Your code already evaluates these conditions. Just persist the result.</p>
+                        <p>Log which rule fired, what conditions it evaluated, and what the outcome was. Not a technical log. A business decision record. Your code already evaluates these conditions. Just persist the result.</p>
                     </div>
                 </div>
 
@@ -1908,7 +1896,7 @@
                     </div>
                     <div class="level-content">
                         <h3>Add LLM narration</h3>
-                        <p>Connect an LLM to read the traceability data and generate human-readable explanations. The prompt is a config artifact — version it, tune it, treat it like code. This is optional but powerful.</p>
+                        <p>Connect an LLM to read the traceability data and generate human-readable explanations. The prompt is a config artifact. Version it, tune it, treat it like code. This is optional but powerful.</p>
                     </div>
                 </div>
 
@@ -1919,7 +1907,7 @@
                     </div>
                     <div class="level-content">
                         <h3>Expand</h3>
-                        <p>Next rule, then the next. The system progressively builds a complete picture of its own business logic — visible to anyone who needs it.</p>
+                        <p>Next rule, then the next. The system progressively builds a complete picture of its own business logic, visible to anyone who needs it.</p>
                     </div>
                 </div>
             </div>
@@ -1928,15 +1916,15 @@
 
     <!-- Coming Soon (light) -->
     <section class="coming-soon" id="agents">
-        <div class="container">
-            <h2>Coming soon — AI agents</h2>
+        <div class="container-wide">
+            <h2>Coming soon: AI agents</h2>
             <p>We are building agents that bring <span class="highlight">business traceability</span> directly into your development workflow.</p>
 
             <div class="agent-cards">
                 <div class="agent-card">
                     <div class="badge">Coming soon</div>
                     <h3>Claude Code agent</h3>
-                    <p>An agent that reads your codebase, identifies where business rules are firing, and suggests where traceability should be added — with implementation guidance tailored to your architecture.</p>
+                    <p>An agent that reads your codebase, identifies where business rules are firing, and suggests where traceability should be added, with implementation guidance tailored to your architecture.</p>
                 </div>
 
                 <div class="agent-card">
@@ -1952,7 +1940,7 @@
 
     <!-- GitHub (dark) -->
     <section class="github-section" id="github">
-        <div class="container">
+        <div class="container-wide">
             <h2>Open source</h2>
             <p>The Clarity Principle is open source. Explore the principle, contribute examples, or build on it.</p>
             <a href="https://github.com/FarabiInnovations/clarity-principle" class="btn btn-on-dark">View the repository</a>
@@ -1961,11 +1949,11 @@
 
     <!-- About (light) -->
     <section class="about" id="about">
-        <div class="container">
+        <div class="container-wide">
             <h2>About</h2>
             <div class="about-content">
                 <div>
-                    <p><strong>Rabea Abdelwahab</strong> — Software engineer and product thinker building at the intersection of enterprise systems and AI. The Clarity Principle grew out of years spent watching business logic disappear into code that only its authors could read.</p>
+                    <p><strong>Rabea Abdelwahab</strong>. Software engineer and product thinker building at the intersection of enterprise systems and AI. The Clarity Principle grew out of years spent watching business logic disappear into code that only its authors could read.</p>
                     <div class="about-links">
                         <a href="https://www.linkedin.com/in/rabeawahab/">LinkedIn</a>
                         <a href="https://github.com/RabeaWahab">GitHub</a>
@@ -1976,8 +1964,8 @@
     </section>
 
     <footer>
-        <div class="container">
-            <p>Clarity Principle — an open source design principle by Rabea Abdelwahab</p>
+        <div class="container-wide">
+            <p>Clarity Principle, an open source design principle by Rabea Abdelwahab</p>
         </div>
     </footer>
 
