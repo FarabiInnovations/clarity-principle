@@ -1,6 +1,8 @@
-# Clarity Principle
+<p align="center">
+  <img src="logo.svg" alt="Clarity Principle" width="360">
+</p>
 
-Make business logic visible through traceability and narration.
+<p align="center">Make business logic visible through traceability and narration.</p>
 
 ## What is this?
 
